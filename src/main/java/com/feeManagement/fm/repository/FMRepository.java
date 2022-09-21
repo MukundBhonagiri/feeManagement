@@ -6,4 +6,6 @@ import com.feeManagement.fm.entity.FeesTemplate;
 
 public interface FMRepository extends CrudRepository<FeesTemplate, Integer> {
 
+	FeesTemplate findByFeesId(Integer feesId);
+
 }

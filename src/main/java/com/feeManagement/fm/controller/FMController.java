@@ -33,26 +33,31 @@ public class FMController  {
 	
 	private static final Logger log = LogManager.getLogger(FMController.class);
 	
+	FMService fmService;
+	
 	@Autowired
-	FMService fmService;	
-	
-	@PostMapping("/createFeeDetails")
-	public ResponseEntity<FeeTemplateVo> saveFeeManagementDetails(@Valid @RequestBody FeeTemplateVo templateVo) {
-		log.info("entered to controller"+templateVo.getTenantId());
-		FeesTemplate feeTemp = fmService.saveFeeManagementDetails(templateVo);
-		return  new ResponseEntity<>(templateVo, HttpStatus.CREATED);
-	} 
-	
-	@GetMapping
-	public List<FeesTemplate> getFeeManagementDetails() {
-		
-		return fmService.getFeeManagementDetails();
+	public FMController(FMService fmService) {
+		this.fmService = fmService;
 	}
 	
-	@PutMapping
+	@PostMapping("/createFeeDetails")
+	public ResponseEntity<List<FeesTemplate>> saveFeeManagementDetails(@Valid @RequestBody FeeTemplateVo templateVo) {
+		log.info("entered to controller"+templateVo.getTenantId());
+		List<FeesTemplate> feeTemp = fmService.saveFeeManagementDetails(templateVo);
+		return new ResponseEntity<List<FeesTemplate>>(feeTemp, HttpStatus.CREATED);
+	} 
+	
+	@GetMapping("/{studentId}")
+	public List<FeesTemplate> getFeeManagementDetails(@PathVariable("studentId") Integer studentId) {
+		
+		return fmService.getFeeManagementDetails(studentId);
+	}
+	
+	@PostMapping
 	public ResponseEntity<FeesTemplate> updateFeeManagementDetails(@RequestBody FeeTemplateVo templateVo ) {
-		FeesTemplate feeTemp =  fmService.saveFeeManagementDetails(templateVo);
-		return  new ResponseEntity<>(feeTemp, HttpStatus.CREATED);
+		FeesTemplate feeTemp = new FeesTemplate();
+		  fmService.updateFeeManagementDetails(templateVo);
+		return  new ResponseEntity<FeesTemplate>(feeTemp, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{feesId}")
