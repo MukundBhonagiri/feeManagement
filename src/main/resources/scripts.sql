@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS fees.fees_template
     CONSTRAINT fees_template_pkey PRIMARY KEY (fees_id)
 )
 
-TABLESPACE pg_default;
+TABLESPACE pg_default; 
 
 ALTER TABLE IF EXISTS fees.fees_template
     OWNER to postgres;
