@@ -1,7 +1,12 @@
 package com.feeManagement.fm.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,7 +66,6 @@ public class FMService {
 			if (!(template.getPayFrequency().equalsIgnoreCase(feesTemplate.getPayFrequency())
 					&& template.getTerm().equalsIgnoreCase(feesTemplate.getTerm())
 					//&& template.getDueDate() == fee.getDueDate() 
-					&& template.getTermId().equalsIgnoreCase(feesTemplate.getTermId())
 					&& templateVo.getFeesCategory().equalsIgnoreCase(feesTemplate.getFeesCategory())
 					&& templateVo.getFeesDescription().equalsIgnoreCase(feesTemplate.getFeesDescription())
 					&& templateVo.getGradeIds().equalsIgnoreCase(feesTemplate.getGradeIds())
@@ -111,21 +115,23 @@ public class FMService {
 	}
 	
 	private FeesTemplate convertTemplateVotoTemplate(FeeTemplateVo templateVo, FeePayDetails fee, FeesTemplate feesTemplate) {
-		feesTemplate.setTenantId(templateVo.getTenantId());
-		feesTemplate.setSchoolId(templateVo.getSchoolId());
+		String date =convertLocalDateToDDMMMFormat(fee.getDueDate()); 
+		//saving UUIDs in Postgres DB
+		//feesTemplate.setTenantId(tenantId);
+		//feesTemplate.setSchoolId(schoolId);
 		feesTemplate.setFeesCategory(templateVo.getFeesCategory());
 		feesTemplate.setFeesDescription(templateVo.getFeesDescription());
 		feesTemplate.setApplicableTo(templateVo.getApplicableTo());
 		feesTemplate.setGradeIds(templateVo.getGradeIds());
-		feesTemplate.setCreatedBy(templateVo.getCreatedBy());
+		//feesTemplate.setCreatedBy((UUID)createdBy);
 		feesTemplate.setAllowPartialPay(templateVo.isAllowPartialPay());
-		feesTemplate.setValidity(templateVo.getValidity());
+		feesTemplate.setValidity(convertLocalDateToYYYYFormat(templateVo.getValidity()));
 		feesTemplate.setCurrency(templateVo.getCurrency());
 		feesTemplate.setNotifyBefore(templateVo.getNotifyBefore());
 
 		feesTemplate.setTerm(fee.getTerm());
-		feesTemplate.setTermId(fee.getTermId());
-		feesTemplate.setDueDate(fee.getDueDate());
+		//feesTemplate.setTermId(termId);
+		feesTemplate.setDueDate(date);
 		feesTemplate.setToPay(fee.getToPay());
 		feesTemplate.setPayFrequency(fee.getPayFrequency());
 		return feesTemplate;
@@ -134,9 +140,10 @@ public class FMService {
 	private StudentFeeTemplate convertTemplateVotoStudentTemplate(FeeTemplateVo templateVo, FeePayDetails fee,
 			StudentFeeTemplate studentFeeTemplate) {
 		
+		String date =convertLocalDateToDDMMMFormat(fee.getDueDate()); 
 		studentFeeTemplate.setAcademicYear(templateVo.getTenantId());
 		studentFeeTemplate.setFeesCategory(templateVo.getFeesCategory());
-		studentFeeTemplate.setStudentId(null);
+		//studentFeeTemplate.setStudentId(null);
 		studentFeeTemplate.setPaid(false);
 		studentFeeTemplate.setPaidDate(null);
 		studentFeeTemplate.setPaymentMode(null);
@@ -144,10 +151,26 @@ public class FMService {
 		studentFeeTemplate.setReferenceNo(null);
 		studentFeeTemplate.setNotificationSent(false);
 		studentFeeTemplate.setPayTerm(fee.getTerm());
-		studentFeeTemplate.setDueDate(fee.getDueDate());
+		studentFeeTemplate.setDueDate(date);
 		studentFeeTemplate.setToPay(fee.getToPay());
 	
 		return studentFeeTemplate;
+	}
+	
+	public String convertLocalDateToDDMMMFormat(LocalDate date){
+		DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("dd MMM")
+                .toFormatter(Locale.US);
+        System.out.println(formatter.format(date));
+		return formatter.format(date);
+	}
+	
+	public String convertLocalDateToYYYYFormat(LocalDate date){
+		DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("YYYY")
+                .toFormatter(Locale.US);
+        System.out.println(formatter.format(date));
+		return formatter.format(date);
 	}
 
 

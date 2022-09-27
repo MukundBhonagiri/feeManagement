@@ -1,5 +1,6 @@
 package com.feeManagement.fm.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -29,12 +31,12 @@ public class StudentFeeTemplate {
     private String feesCategory;
 	@Column
     private double toPay;
-	@Column
+	@Transient
     private Integer studentId;
 	@Column
     private String payTerm;
 	@Column
-    private Date dueDate;
+    private String dueDate;
 	@Column
     private boolean paid;
 	@Column
@@ -77,22 +79,22 @@ public class StudentFeeTemplate {
 	public void setToPay(double toPay) {
 		this.toPay = toPay;
 	}
-	public Integer getStudentId() {
-		return studentId;
-	}
-	public void setStudentId(Integer studentId) {
-		this.studentId = studentId;
-	}
+//	public Integer getStudentId() {
+//		return studentId;
+//	}
+//	public void setStudentId(Integer studentId) {
+//		this.studentId = studentId;
+//	}
 	public String getPayTerm() {
 		return payTerm;
 	}
 	public void setPayTerm(String payTerm) {
 		this.payTerm = payTerm;
 	}
-	public Date getDueDate() {
+	public String getDueDate() {
 		return dueDate;
 	}
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
 	}
 	public boolean isPaid() {

@@ -1,5 +1,6 @@
 package com.feeManagement.fm.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ public class FeeTemplateVo {
 	private Integer createdBy;
 	private String updatedBy;
 	private boolean allowPartialPay;
-	private Date validity;
+	private LocalDate validity;
 	private String currency;
 	@NotNull(message = "is Active required")
 	private boolean isActive;
@@ -108,10 +109,10 @@ public class FeeTemplateVo {
 	public void setAllowPartialPay(boolean allowPartialPay) {
 		this.allowPartialPay = allowPartialPay;
 	}
-	public Date getValidity() {
+	public LocalDate getValidity() {
 		return validity;
 	}
-	public void setValidity(Date validity) {
+	public void setValidity(LocalDate validity) {
 		this.validity = validity;
 	}
 	public String getCurrency() {

@@ -1,5 +1,6 @@
 package com.feeManagement.fm.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.Data;
@@ -13,7 +14,7 @@ public class FeePayDetails {
 
 	private String term;
 	private String termId;
-	private Date dueDate;
+	private LocalDate dueDate;
 	private double toPay;
 	private String payFrequency;
 	
@@ -33,10 +34,10 @@ public class FeePayDetails {
 	public void setTermId(String termId) {
 		this.termId = termId;
 	}
-	public Date getDueDate() {
+	public LocalDate getDueDate() {
 		return dueDate;
 	}
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
 	public double getToPay() {
