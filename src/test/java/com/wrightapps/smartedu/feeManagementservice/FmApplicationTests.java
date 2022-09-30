@@ -1,4 +1,4 @@
-package com.feeManagement.fm;
+package com.wrightapps.smartedu.feeManagementservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
