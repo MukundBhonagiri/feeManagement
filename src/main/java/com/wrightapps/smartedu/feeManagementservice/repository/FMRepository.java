@@ -1,8 +1,8 @@
-package com.feeManagement.fm.repository;
+package com.wrightapps.smartedu.feeManagementservice.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.feeManagement.fm.entity.FeesTemplate;
+import com.wrightapps.smartedu.feeManagementservice.entity.FeesTemplate;
 
 public interface FMRepository extends CrudRepository<FeesTemplate, Integer> {
 

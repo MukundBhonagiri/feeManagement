@@ -1,4 +1,4 @@
-package com.feeManagement.fm.entity;
+package com.wrightapps.smartedu.feeManagementservice.entity;
 
 import java.time.LocalDate;
 import java.util.Date;

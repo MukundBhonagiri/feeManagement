@@ -1,39 +1,44 @@
-package com.feeManagement.fm.service;
+package com.wrightapps.smartedu.feeManagementservice.service.impl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.feeManagement.fm.entity.FeesTemplate;
-import com.feeManagement.fm.entity.StudentFeeTemplate;
-import com.feeManagement.fm.model.FeePayDetails;
-import com.feeManagement.fm.model.FeeTemplateVo;
-import com.feeManagement.fm.repository.FMRepository;
-import com.feeManagement.fm.repository.StudentFMRepository;
+import com.wrightapps.smartedu.feeManagementservice.constants.ApplicationConstants;
+import com.wrightapps.smartedu.feeManagementservice.entity.FeesTemplate;
+import com.wrightapps.smartedu.feeManagementservice.entity.StudentFeeTemplate;
+import com.wrightapps.smartedu.feeManagementservice.model.FeePayDetails;
+import com.wrightapps.smartedu.feeManagementservice.repository.FMRepository;
+import com.wrightapps.smartedu.feeManagementservice.repository.StudentFMRepository;
+import com.wrightapps.smartedu.feeManagementservice.request.dto.FeeTemplateVo;
+import com.wrightapps.smartedu.feeManagementservice.response.dto.FMResponse;
+import com.wrightapps.smartedu.feeManagementservice.service.FMService;
 
 @Service
-public class FMService {
-	private static final Logger log = LogManager.getLogger(FMService.class);
+public class FMServiceImpl implements FMService {
+	
+	private static final Logger log = LoggerFactory.getLogger(FMServiceImpl.class);
 
-	FMRepository fmRepo;
-	StudentFMRepository studentFmRepo;
+	private FMRepository fmRepo;
+	private StudentFMRepository studentFmRepo;
 
 	@Autowired
-	public FMService(FMRepository fmRepo, StudentFMRepository studentFmRepo) {
+	public FMServiceImpl(FMRepository fmRepo, StudentFMRepository studentFmRepo) {
 		this.fmRepo = fmRepo;
 		this.studentFmRepo = studentFmRepo;
 	}
 
-	public List<FeesTemplate> saveFeeManagementDetails(FeeTemplateVo templateVo) {
+	public ResponseEntity<FMResponse> saveFeeManagementDetails(FeeTemplateVo templateVo) {
 		List<FeesTemplate> feeTemplateList = new ArrayList<>();
 		templateVo.getPayTerm().forEach(fee -> {
 			FeesTemplate feesTemplate = new FeesTemplate();
@@ -47,16 +52,23 @@ public class FMService {
 			
 			feeTemplateList.add(feesTemplate);
 		});
-		return feeTemplateList;
+		FMResponse response = new FMResponse();
+		response.setStatus(ApplicationConstants.SUCCESS);
+		response.setResults(feeTemplateList);
+		return new ResponseEntity<FMResponse>(response,HttpStatus.OK);
 	}
 
-	public List<FeesTemplate> getFeeManagementDetails(Integer studentId) {
-		return (List<FeesTemplate>) fmRepo.findAll();
+	public ResponseEntity<FMResponse> getFeeManagementDetails(Integer studentId) {
+		List<FeesTemplate> feeTemplateList = (List<FeesTemplate>) fmRepo.findAll();
+		FMResponse response = new FMResponse();
+		response.setStatus(ApplicationConstants.SUCCESS);
+		response.setResults(feeTemplateList);
+		return new ResponseEntity<FMResponse>(response,HttpStatus.OK);
 	}
 
 	String updateStatus = "";
 
-	public void updateFeeManagementDetails(FeeTemplateVo templateVo) {
+	public ResponseEntity<FMResponse> updateFeeManagementDetails(FeeTemplateVo templateVo) {
 		FeesTemplate feesTemplate = fmRepo.findByFeesId(templateVo.getFeesId());
 		templateVo.getPayTerm().forEach(template -> {
 			log.info("template.getToPay():: "+ template.getToPay() +":: fee.getToPay():: "+ feesTemplate.getToPay());
@@ -79,7 +91,6 @@ public class FMService {
 				updateStatus = "OtherChange";
 			}
 			if ("PayChange".equalsIgnoreCase(updateStatus)) {
-				// update the fee template and student fee template
 				feesTemplate.setToPay(template.getToPay());
 				fmRepo.save(feesTemplate);
 				List<StudentFeeTemplate> studentFeeTemplates = studentFmRepo.findByFeesId(templateVo.getFeesId());
@@ -91,7 +102,6 @@ public class FMService {
 			} else if("OtherChange".equalsIgnoreCase(updateStatus)) {
 				log.info("entered to else block");
 				StudentFeeTemplate studentFeeTemplate = new StudentFeeTemplate();
-				// update the template and delete all records in student template and recreate
 				FeesTemplate feesTemplate2 = this.convertTemplateVotoTemplate(templateVo, template, feesTemplate);
 				fmRepo.save(feesTemplate2);
 				studentFmRepo.deleteByFeesId(templateVo.getFeesId());
@@ -99,6 +109,12 @@ public class FMService {
 				studentFmRepo.save(studentFeeTemplate);
 			}
 		});
+		
+		FMResponse response = new FMResponse();
+		response.setStatus(ApplicationConstants.SUCCESS);
+		response.setResult(feesTemplate);
+		
+		return new ResponseEntity<FMResponse>(response,HttpStatus.OK);
 	}
 
 	public void deleteFeeManagementDetails(Integer feesId) {
@@ -172,6 +188,7 @@ public class FMService {
         System.out.println(formatter.format(date));
 		return formatter.format(date);
 	}
+
 
 
 }

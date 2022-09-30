@@ -1,4 +1,4 @@
-package com.feeManagement.fm.model;
+package com.wrightapps.smartedu.feeManagementservice.request.dto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,7 +9,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.feeManagement.fm.entity.FeesTemplate;
+import com.wrightapps.smartedu.feeManagementservice.entity.FeesTemplate;
+import com.wrightapps.smartedu.feeManagementservice.model.FeePayDetails;
 
 import lombok.Data;
 import lombok.Getter;

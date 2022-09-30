@@ -1,4 +1,4 @@
-package com.feeManagement.fm.exception;
+package com.wrightapps.smartedu.feeManagementservice.exception;
 
 import java.util.HashMap;
 import java.util.List;

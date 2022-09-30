@@ -1,4 +1,4 @@
-package com.feeManagement.fm.config;
+package com.wrightapps.smartedu.feeManagementservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,8 +14,8 @@ public class ResourceConfig extends WebSecurityConfigurerAdapter {
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/h2-console/**").permitAll();
+                .antMatchers("/").permitAll();
+                
 
         http.csrf().disable();
         http.headers().frameOptions().disable();

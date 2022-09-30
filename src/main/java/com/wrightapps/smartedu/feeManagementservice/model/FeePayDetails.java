@@ -1,4 +1,4 @@
-package com.feeManagement.fm.model;
+package com.wrightapps.smartedu.feeManagementservice.model;
 
 import java.time.LocalDate;
 import java.util.Date;
